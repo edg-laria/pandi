@@ -1,0 +1,36 @@
+----------------------------------------               
+----------------------------------------               
+2022-03-25 15:26:50.8534 ERROR Message: ServicioBancoCuentaBancaria >> Agregar                
+	ErrorTitle: ServicioBancoCuentaBancaria >> Agregar               
+	ErrorSummary: An error occurred while updating the entries. See the inner exception for details.               
+	ErrorDetails:    en System.Data.Entity.Internal.InternalContext.SaveChanges()
+   en System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   en System.Data.Entity.DbContext.SaveChanges()
+   en Datos.Repositorios.RepositorioBase`1.Insertar(T entidad) en D:\sac\sac\SAC\Datos\Repositorios\RepositorioBase.cs:línea 33
+   en Datos.Repositorios.BancoCuentaBancariaRepositorio.Agregar(BancoCuentaBancaria oBancoCuentaBancaria) en D:\sac\sac\SAC\Datos\Repositorios\BancoCuentaBancariaRepositorio.cs:línea 27
+   en Negocio.Servicios.ServicioBancoCuentaBancaria.Agregar(BancoCuentaBancariaModel oBancoCuentaBancariaModel) en D:\sac\sac\SAC\Negocio\Servicios\ServicioBancoCuentaBancaria.cs:línea 40
+----------------------------------------               
+----------------------------------------               
+2022-03-25 15:27:01.6360 ERROR Message: ServicioCompras >> RegistrarPagosFacturas                
+	ErrorTitle: ServicioCompras >> RegistrarPagosFacturas               
+	ErrorSummary: No se puede implementar el método o la operación.               
+	ErrorDetails:    en Negocio.Servicios.ServicioBancoCuentaBancaria.Agregar(BancoCuentaBancariaModel oBancoCuentaBancariaModel) en D:\sac\sac\SAC\Negocio\Servicios\ServicioBancoCuentaBancaria.cs:línea 46
+   en Negocio.Servicios.ServicioCompra.RegistrarPagosFacturas(List`1 oListaFacturas, PagosFacturasModel oMediosPago) en D:\sac\sac\SAC\Negocio\Servicios\ServicioCompra.cs:línea 868
+----------------------------------------               
+----------------------------------------               
+2022-03-25 15:51:07.4918 ERROR Message: ServicioBancoCuentaBancaria >> Agregar                
+	ErrorTitle: ServicioBancoCuentaBancaria >> Agregar               
+	ErrorSummary: An error occurred while updating the entries. See the inner exception for details.               
+	ErrorDetails:    en System.Data.Entity.Internal.InternalContext.SaveChanges()
+   en System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   en System.Data.Entity.DbContext.SaveChanges()
+   en Datos.Repositorios.RepositorioBase`1.Insertar(T entidad)
+   en Datos.Repositorios.BancoCuentaBancariaRepositorio.Agregar(BancoCuentaBancaria oBancoCuentaBancaria)
+   en Negocio.Servicios.ServicioBancoCuentaBancaria.Agregar(BancoCuentaBancariaModel oBancoCuentaBancariaModel)
+----------------------------------------               
+----------------------------------------               
+2022-03-25 15:51:10.1843 ERROR Message: ServicioCompras >> RegistrarPagosFacturas                
+	ErrorTitle: ServicioCompras >> RegistrarPagosFacturas               
+	ErrorSummary: No se puede implementar el método o la operación.               
+	ErrorDetails:    en Negocio.Servicios.ServicioBancoCuentaBancaria.Agregar(BancoCuentaBancariaModel oBancoCuentaBancariaModel)
+   en Negocio.Servicios.ServicioCompra.RegistrarPagosFacturas(List`1 oListaFacturas, PagosFacturasModel oMediosPago)

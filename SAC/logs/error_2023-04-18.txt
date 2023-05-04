@@ -1,0 +1,6 @@
+----------------------------------------               
+----------------------------------------               
+2023-04-18 16:40:38.5811 ERROR Message: FacturaController.GrabarFactura():Ops!, El servicio de AFIP no responde...                
+	ErrorTitle:                
+	ErrorSummary:                
+	ErrorDetails: 

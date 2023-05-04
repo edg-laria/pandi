@@ -1,0 +1,2 @@
+F:\PandiNet\SAC\obj\Release\SAC.csproj.AssemblyReference.cache
+F:\PandiNet\SAC\obj\Release\SAC.csproj.CoreCompileInputs.cache

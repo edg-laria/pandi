@@ -1,11 +1,15 @@
 *.vs/
 
+SAC/obj/*
+Negocio/obj/*
+Datos/obj/*
+Entidad/obj/*
 
+SAC/bin/*
+Negocio/bin/*
+Datos/bin/*
+Entidad/bin/*
 
-SAC/
-Negocio/
-Datos/
-Entidad/
 
 # User-specific files
 *PandiNet/.vs/PandiNet/v16/.suo

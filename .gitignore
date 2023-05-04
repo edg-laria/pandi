@@ -1,0 +1,18 @@
+*.vs/
+
+
+
+SAC/
+Negocio/
+Datos/
+Entidad/
+
+# User-specific files
+*PandiNet/.vs/PandiNet/v16/.suo
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+ConsoleTest/
+packages/

@@ -1,5 +1,5 @@
 *.vs/
-
+SAC/obj/*
 Negocio/
 Datos/
 Entidad/

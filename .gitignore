@@ -5,8 +5,10 @@ Negocio/obj/*
 Datos/obj/*
 Entidad/obj/*
 
-Negocio/
-Datos/
+SAC/bin/*
+Negocio/bin/*
+Datos/bin/*
+Entidad/bin/*
 
 
 # User-specific files

@@ -35,12 +35,16 @@ namespace SAC.Infrastructure
 
 
             CreateMap<CobroFacturaModoModel, CobroFacturaModoModelView>();
+
             CreateMap<CobroFacturaModoModelView, CobroFacturaModoModel>();
 
             CreateMap<CobroFacturaModel, CobroFacturaModelView>();
-            CreateMap<CobroFacturaModelView, CobroFacturaModel>()
-                 .ForMember(cf => cf.Saldo, cfm => cfm.MapFrom(i => i.saldoCobro)); ;
 
+            CreateMap<CobroFacturaModelView, CobroFacturaModel>();
+                 //.ForMember(cf => cf.Saldo, cfm => cfm.MapFrom(i => i.Tipo != null ? i.saldoCobro : i.Saldo )) 
+                 //.ForMember(cf => cf.Parcial, cfm => cfm.MapFrom(i =>  i.aplicacion + i.Parcial))
+                 //.ForMember(cf => cf.Total, cfm => cfm.MapFrom(i => i.Tipo != null ? i.Total : i.cobro));
+            //.ForMember(cf => cf.Parcial, cfm => cfm.MapFrom(i => i.Tipo != null ? 0 : i.aplicacion + i.Parcial))
 
             CreateMap<FacturaModelView, FacturaVentaModel>()
                     .ForMember(fv => fv.IdMoneda, fvm => fvm.MapFrom(i => i.idTipoMoneda));

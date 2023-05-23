@@ -18,6 +18,7 @@ namespace Datos.ModeloDeDatos
         public PrespuestoActual()
         {
             this.Proveedor = new HashSet<Proveedor>();
+            this.Cliente = new HashSet<Cliente>();
         }
     
         public int Id { get; set; }
@@ -38,5 +39,7 @@ namespace Datos.ModeloDeDatos
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Proveedor> Proveedor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cliente> Cliente { get; set; }
     }
 }

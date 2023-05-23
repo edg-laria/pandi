@@ -121,7 +121,7 @@
                                                                 claseSele = "table-default";
                                                             }
 
-                                                    <tr ondblclick="Cobrar(@item.Id, @item.Saldo, @item.NumeroFactura, @item.TipoComprobanteVenta.Id , @item.IdMoneda)" class="Seleccionable @claseSele">
+                                                    <tr ondblclick="Cobrar(@item.Id, @item.Saldo, @item.NumeroFactura, @item.TipoComprobanteVenta.Id , @item.IdMoneda)" class="Seleccionable @claseSele ">
 
                                                         @Html.Hidden("idFacturaSeleccionada")
                                                         @Html.Hidden("idModoCobro")
@@ -284,7 +284,7 @@
                                     <div class="row  m-t-5">
                                         <div class="col-md-6"></div>
                                         <div class="col-md-3">
-                                            <input type="button" class="btn btn-success btn-block btn-sm" id="btnSelPago" onkeypress="EjecutarPago()" onclick="EjecutarPago()" value="Generar Pago">
+                                            <input type="button" class="btn btn-success btn-block btn-sm " id="btnSelPago" onkeypress="EjecutarPago()" onclick="EjecutarPago()" value="Generar Pago">
                                         </div>
                                     </div>
 

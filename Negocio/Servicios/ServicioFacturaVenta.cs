@@ -34,7 +34,7 @@ namespace Negocio.Servicios
         private ServicioTarjetaOperacion oServicioTarjetaOperacion = new ServicioTarjetaOperacion();
         private ServicioImputacion oServicioImputacion = new ServicioImputacion();
         private ServicioContable oServicioContable = new ServicioContable();
-        private ServicioTrackingFacturaPagoCompra oServicioTrackingFacturaPagoCompra = new ServicioTrackingFacturaPagoCompra();
+        private ServicioTrackingFacturaCobro ServicioTrackingFacturaCobro = new ServicioTrackingFacturaCobro();
         private ServicioBancoCuenta oServicioBancoCuenta = new ServicioBancoCuenta();
         private ServicioCajaGrupo servicioCajaGrupo = new ServicioCajaGrupo();
         private ServicioRetencion servicioRetencion = new ServicioRetencion();
@@ -159,22 +159,16 @@ namespace Negocio.Servicios
                 var cliente = oServicioCliente.GetClientePorId(cobroFacturaModel[0].IdCliente ?? 0);
                 decimal saldoPagoTotalAFavor = cobroFacturaModel.Where(x => x.IdTipoComprobante.Equals(IdTipoComprobanteVenta)).Sum(x => x.Saldo);
 
-              // medioCobro.Monto = medioCobro.montoTotal + saldoPagoTotalAFavor;
-                decimal saldoPagoTotal = saldoPagoTotalAFavor; // medioCobro.Monto ?? 0;
+                decimal saldoPagoTotal = saldoPagoTotalAFavor;
 
 
                 decimal[] aDifCot = new decimal[3];
                 aDifCot[0] = 0;
-                //int idMoneda = 1;
 
                 CobroFacturaModel cbtCobroFactura = (from cbtCobro in cobroFacturaModel
                                             where cbtCobro.IdTipoComprobante == IdTipoComprobanteVenta                                                         
                                             select cbtCobro).FirstOrDefault();
-                //facturas cobradas 
-                //List<CobroFacturaModel> ListfacturaCobrada = (from cbtCobro in cobroFacturaModel
-                //                                              where cbtCobro.IdTipoComprobante != IdTipoComprobanteVenta
-                //                                              select cbtCobro).ToList();
-          
+             
 
                 var CodigoAsiento = oServicioContable.GetNuevoCodigoAsiento() + 1;
                 DiarioModel asiento = new DiarioModel();
@@ -184,9 +178,7 @@ namespace Negocio.Servicios
                 asiento.Tipo = "VP";                    
                 asiento.Balance = int.Parse(cbtCobroFactura.Fecha.ToString("yyyy"));
                 asiento.Moneda = oServicioTipoMoneda.GetTipoMoneda(cbtCobroFactura.IdMoneda).Descripcion;
-                //asiento.Descripcion = "Cobro Nº " + nuevoPagoRegistrado.NumeroCobro;
-                //asiento.DescripcionMa = "Cobro Nº" + nuevoPagoRegistrado.NumeroCobro + ", Cliente:" + cliente.Nombre;
-                //asiento.Titulo = "Cobro de Factura";
+        
 
                 foreach (var Factura in cobroFacturaModel)
                 {
@@ -222,38 +214,44 @@ namespace Negocio.Servicios
 
                         if (Factura.IdMoneda != 1 && cbtCobroFactura.Cotiza != Factura.Cotiza)
                         {                         
-                        //    aDifCot[1] =  1;
-                        //    aDifCot[0] += Factura.Saldo ;
-                        //}
-                        //else
-                        //{
+                      
                             aDifCot[1] = Factura.Cotiza;
                             aDifCot[0] += Factura.Saldo * Factura.Cotiza;
                         }
 
                         Factura.FechaCobro = cbtCobroFactura.Fecha;
-                        Factura.NumeroCobro = tipoComprobante.Numero;
+                        Factura.NumeroCobro = tipoComprobante.Numero; //si en fact hay un cbt de cobro 
                         Factura.Vencimiento = cbtCobroFactura.Fecha;
                         Factura.CotizaP = cbtCobroFactura.Cotiza;
                         //esto se hace para saber si el pago es mayos a todas las facturas pagadas
-                        saldoPagoTotal = saldoPagoTotal - Factura.Saldo;                       
-                        if (medioCobro.montoTotal >= Factura.Saldo)
+                        saldoPagoTotal = saldoPagoTotal - Factura.Saldo;
+
+                        //if (medioCobro.montoTotal >= Factura.Total)
+                        //{
+                        //    Factura.Saldo = 0;
+                        //    Factura.Parcial = 0;
+                        //}
+                        //else
+                        //{
+                        //   // Factura.Parcial += medioCobro.montoTotal ;                             
+                        //   // var nuevoSaldo = Factura.Total - Factura.Parcial;
+                        //   // Factura.Saldo = nuevoSaldo;
+                        //    Factura.Parcial = Factura.Saldo == 0 ? 0 : Factura.Parcial;
+                        //}    
+
+
+                        Factura.Saldo = Factura.saldoCobro;
+                        if (Factura.Saldo == 0)
                         {
-                            Factura.Saldo = 0;
                             Factura.Parcial = 0;
                         }
-                        else
-                        {
-                            Factura.Parcial += medioCobro.montoTotal ;                             
-                            var nuevoSaldo = Factura.Total - Factura.Parcial;
-                            Factura.Saldo = nuevoSaldo;
-                            Factura.Parcial = Factura.Saldo == 0 ? 0 : Factura.Parcial;
-                        }                           
+                        else { Factura.Parcial += Factura.aplicacion; }
+
                         //enviamos los datos a modificar y recuperamos la entidad actualizada
                         newFactura = ActualizaVentaFacturaCobro(Factura);
-                        // seteo el tipo de moneda para grabar en caja
+                       // seteo el tipo de moneda para grabar en caja
                        // idMoneda = Factura.IdMoneda;
-                        // asiento de Retencion sobre la factura 
+                       // asiento de Retencion sobre la factura 
                    
                     }
                     else
@@ -284,7 +282,7 @@ namespace Negocio.Servicios
                         else
                         {
                            
-                            /// crea el comprobante de pago de las facturas seleccionadas
+                            // crea el comprobante de pago de las facturas seleccionadas
                             Factura.NumeroFactura = tipoComprobante.Numero;
                             Factura.Codigo = cliente.Codigo;
                             Factura.Tipo = "P";
@@ -295,18 +293,11 @@ namespace Negocio.Servicios
                             Factura.Descuento = "0";
                             Factura.NumeroTra = "0";
                             Factura.Anula = "0";
-                            Factura.IdTipoComprobante = IdTipoComprobanteVenta;                           
-                            Factura.Total = - medioCobro.montoTotal;
+                            Factura.IdTipoComprobante = IdTipoComprobanteVenta;                                                    
                             if (Factura.IdMoneda == 2)
                             {
                                 Factura.TotalDolares = Factura.Total;
-                            }
-//comento para registrar adelantos                                             
-                            //if (saldoPagoTotal < 0)
-                            //{
-                            //    saldoPagoTotal = 0;
-                            //}
-                            Factura.Saldo = saldoPagoTotal;
+                            }                           
                             Factura.Fecha = cbtCobroFactura.Fecha;
                             Factura.FechaCobro = cbtCobroFactura.Fecha;                                                     
                             Factura.NumeroCobro = tipoComprobante.Numero;
@@ -314,13 +305,25 @@ namespace Negocio.Servicios
                             Factura.IdUsuario = medioCobro.IdUsuario;
                             Factura.UltimaModificacion = DateTime.Now;
                             Factura.Vencimiento = cbtCobroFactura.Fecha;
-                          // Factura.IdMoneda = idMoneda;/// tiene q ser la moneda seleccionada en form 
                             Factura.Periodo = int.Parse(cbtCobroFactura.Fecha.ToString("yyMM"));                                                      
                             Factura.CodigoDiario = CodigoAsiento;
-                            //----------- Registro la "Factura del Pago" --------------
+                            Factura.Saldo = Factura.saldoCobro;
+                            if (Factura.Saldo == 0)
+                            {
+                                Factura.Parcial = 0;
+                            }else {
+                                Factura.Parcial = Factura.aplicacion;
+                            }
+                            Factura.Total = Factura.cobro;
+
+  //Factura.Total = - medioCobro.montoTotal;
+ //Factura.Saldo = saldoPagoTotal;
+                           // Factura.Saldo = Factura.Total - Factura.Parcial;
+
+                            //----------- Registro la "cbt cobro" --------------
                             var nuevoPagoRegistrado = GuardarCobro(Factura);
 
-                            // SaveTrackingCompras(cobroFacturaModel, nuevoPagoRegistrado);
+                            SaveTrackingComprasList(cobroFacturaModel, nuevoPagoRegistrado);
 
                             if (nuevoPagoRegistrado != null)
                             {
@@ -356,6 +359,8 @@ namespace Negocio.Servicios
                                 asiento.Descripcion = "Cobro Nº " + nuevoPagoRegistrado.NumeroCobro;
                                 asiento.DescripcionMa = "Cobro Nº" + nuevoPagoRegistrado.NumeroCobro + ", Cliente:" + cliente.Nombre;
                                 asiento.Titulo = "Cobro de Factura";
+
+
                                 /// asiento Inputacion en valor - negativo?
                                 //var asientoDiario = oServicioContable.InsertAsientoContable(null, asiento, cliente.IdImputacion);
                                 ///// Actualizar Cuenta Contable General (Libro Mayor)CTACBLE                
@@ -638,6 +643,121 @@ namespace Negocio.Servicios
                 _mensaje?.Invoke("Ops!, Ocurrio un error al ejecutar el método de Pago. Comuníquese en contacto con el administrador del sistema " , "error");
             }
         }
+
+        public void RegistroDeCobroCbtAFavor(List<CobroFacturaModel> cobroFacturaModel, int IdTipoComprobanteVenta)
+        {
+            try
+            {               
+                var cliente = oServicioCliente.GetClientePorId(cobroFacturaModel[0].IdCliente ?? 0);
+                decimal saldoPagoTotalAFavor = cobroFacturaModel.Where(x => x.IdTipoComprobante.Equals(IdTipoComprobanteVenta)).Sum(x => x.Saldo);              
+                decimal saldoPagoTotal = saldoPagoTotalAFavor; 
+                decimal[] aDifCot = new decimal[3];
+                aDifCot[0] = 0;
+                CobroFacturaModel cbtCobroFactura = (from cbtCobro in cobroFacturaModel
+                                                     where cbtCobro.IdTipoComprobante == IdTipoComprobanteVenta
+                                                     select cbtCobro).FirstOrDefault();            
+                var CodigoAsiento = oServicioContable.GetNuevoCodigoAsiento() + 1;
+                DiarioModel asiento = new DiarioModel();
+                asiento.Codigo = CodigoAsiento;
+                asiento.Fecha = cbtCobroFactura.Fecha;
+                asiento.Periodo = cbtCobroFactura.Fecha.ToString("yyMM");
+                asiento.Tipo = "VP";
+                asiento.Balance = int.Parse(cbtCobroFactura.Fecha.ToString("yyyy"));
+                asiento.Moneda = oServicioTipoMoneda.GetTipoMoneda(cbtCobroFactura.IdMoneda).Descripcion;
+              
+                foreach (var Factura in cobroFacturaModel)
+                {
+                    CobroFacturaModoModel cobroFacturaModo = new CobroFacturaModoModel();
+           
+                    //--------- Registro de Facturas a Cobrar -----------
+                    if (Factura.IdTipoComprobante != IdTipoComprobanteVenta)
+                    {
+                        //// -------------- registro de asientos                              
+                        asiento.Importe = (Factura.IdMoneda == 1) ? -Factura.Saldo : -(Factura.Saldo * Factura.Cotiza);
+                        asiento.Cotiza = Factura.Cotiza;
+                        asiento.Descripcion = "Deudores por Ventas";
+                        asiento.DescripcionMa = "Cobro Fact Nº " + Factura.NumeroFactura + ", Cliente:" + cliente.Nombre;
+                        asiento.Titulo = "Cobro de Factura";
+
+                        if (Factura.TipoIva == "4") // exterior
+                        {
+                            var asientoVEXT = oServicioContable.InsertAsientoContable("VEXT", asiento, 0);
+                            if (asientoVEXT != null) { oServicioImputacion.AsintoContableGeneral(asientoVEXT); }
+                        }
+                        else //local
+                        {
+                            var asientoVEXT = oServicioContable.InsertAsientoContable("VLOC", asiento, 0);
+                            if (asientoVEXT != null) { oServicioImputacion.AsintoContableGeneral(asientoVEXT); }
+                        }
+
+                        if (Factura.IdMoneda != 1 && cbtCobroFactura.Cotiza != Factura.Cotiza)
+                        {                           
+                            aDifCot[1] = Factura.Cotiza;
+                            aDifCot[0] += Factura.Saldo * Factura.Cotiza;
+                        }
+
+                        Factura.FechaCobro = cbtCobroFactura.Fecha;
+                        Factura.NumeroCobro = cbtCobroFactura.NumeroCobro; 
+                        Factura.Vencimiento = cbtCobroFactura.Fecha;
+                        Factura.CotizaP = cbtCobroFactura.Cotiza;
+
+                       
+                        Factura.Saldo = Factura.saldoCobro;
+                        if (Factura.Saldo == 0)
+                        {
+                            Factura.Parcial = 0;
+                        }
+                        else { Factura.Parcial += Factura.aplicacion; }
+                        ActualizaVentaFacturaCobro(Factura);
+                       
+                        SaveTrackingCompras(Factura.Id, cbtCobroFactura.Id);
+
+
+                    }
+                    else
+                    {
+                        
+                        if (Factura.NumeroFactura > 0 && Factura.IdTipoComprobante == IdTipoComprobanteVenta)
+                        {
+                            Factura.FechaCobro = cbtCobroFactura.Fecha;
+                            Factura.Parcial += Factura.aplicacion;
+                            Factura.Saldo = Factura.saldoCobro;
+
+                                                   
+                            ActualizaVentaFacturaCobro(Factura);
+                        }                       
+                        _mensaje?.Invoke("Cobro efectuado correctamente", "ok");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.Instance.LogExcepcion(ex, "ServicioFacturaVenta >> RegistroDeCobroCbtAFavor");
+                _mensaje?.Invoke("Ops!, Ocurrio un error al ejecutar el método de Pago. Comuníquese en contacto con el administrador del sistema ", "error");
+            }
+        }
+
+        private void SaveTrackingCompras(int idcbtCobro, int idcbtFactura)
+        {
+                    TrackingFacturaCobroModel tracking = new TrackingFacturaCobroModel();
+                    tracking.IdFactura = idcbtFactura;
+                    tracking.IdCobro = idcbtCobro;
+                    ServicioTrackingFacturaCobro.Insert(tracking);               
+        }
+
+        private void SaveTrackingComprasList(List<CobroFacturaModel> modelFacturas, CobroFacturaModel modelCobro)
+        {
+            foreach (var item in modelFacturas)
+            {
+                TrackingFacturaCobroModel tracking = new TrackingFacturaCobroModel();
+                tracking.IdFactura = item.Id;
+                tracking.IdCobro = modelCobro.Id;
+                ServicioTrackingFacturaCobro.Insert(tracking);
+            }
+         
+
+        }
+
 
         public FacturaVentaModel GetFacturaVentaPorId(int idcliente, int idFactura)
         {

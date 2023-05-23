@@ -292,6 +292,9 @@
     <Compile Include="ModeloDeDatos\TipoRetencion.cs">
       <DependentUpon>Entidades.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModeloDeDatos\TrackingFacturaCobroVenta.cs">
+      <DependentUpon>Entidades.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModeloDeDatos\TrackingFacturaPagoCompra.cs">
       <DependentUpon>Entidades.tt</DependentUpon>
     </Compile>
@@ -353,6 +356,7 @@
     <Compile Include="Repositorios\TipoComprobanteRepositorio.cs" />
     <Compile Include="Repositorios\TipoPagoRepositorio.cs" />
     <Compile Include="Repositorios\TipoRetencionRepositorio.cs" />
+    <Compile Include="Repositorios\TrackingFacturaCobroRepositorio.cs" />
     <Compile Include="Repositorios\TrackingFacturaPagoCompraRepositorio.cs" />
     <Compile Include="Repositorios\ValorCotizacionRepositorio.cs" />
     <Compile Include="Repositorios\TipoMonedaRepositorio.cs" />

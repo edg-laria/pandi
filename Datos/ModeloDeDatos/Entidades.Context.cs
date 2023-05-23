@@ -98,5 +98,6 @@ namespace Datos.ModeloDeDatos
         public virtual DbSet<FacturaElectronica> FacturaElectronica { get; set; }
         public virtual DbSet<ClienteDireccion> ClienteDireccion { get; set; }
         public virtual DbSet<Localidad> Localidad { get; set; }
+        public virtual DbSet<TrackingFacturaCobroVenta> TrackingFacturaCobroVenta { get; set; }
     }
 }

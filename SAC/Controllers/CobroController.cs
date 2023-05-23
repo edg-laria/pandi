@@ -58,7 +58,7 @@ namespace SAC.Controllers
         }
 
         [HttpGet()]
-        public ActionResult Index(int IdCliente = 0 )
+        public ActionResult Index(int IdCliente = 0)
         {
             CobroFacturaModoModelView modelView = new CobroFacturaModoModelView();
             try
@@ -68,19 +68,19 @@ namespace SAC.Controllers
 
                     Session["mediosCobro"] = null;
 
-                    modelView.Cliente = Mapper.Map<ClienteModel, ClienteModelView>(servicioCliente.GetClientePorId(IdCliente));                    
-                   
+                    modelView.Cliente = Mapper.Map<ClienteModel, ClienteModelView>(servicioCliente.GetClientePorId(IdCliente));
+
                     modelView.Cotizacion = servicioTipoMoneda.GetCotizacionPorIdMoneda(2);
                     modelView.Periodo = Int32.Parse(DateTime.Now.ToString("yyMM"));
 
                     modelView.CuentaCorriente = Mapper.Map<List<CobroFacturaModel>, List<CobroFacturaModelView>>(servicioFacturaVenta.GetClienteCtaCteCbte(IdCliente));
-                    
+
                     modelView.ResumenPago = null; // Mapper.Map<List<CobroFacturaModel>, List<CobroFacturaModelView>>(servicioFacturaVenta.ObtenerPorIdCliente_Moneda(IdCliente, IdTipoMoneda));
 
                     Session["Facturas_Cobro"] = null;
 
                     List<BancoCuentaModelView> ListaCuentaBancaria = Mapper.Map<List<BancoCuentaModel>, List<BancoCuentaModelView>>(servicioBancoCuenta.GetAllCuenta());
-                    
+
                     modelView.SelectCuentasBancarias = (ListaCuentaBancaria.Select(x => new SelectListItem()
                     {
                         Value = x.Id.ToString(),
@@ -114,7 +114,7 @@ namespace SAC.Controllers
                                                  })).ToList();
                     modelView.SelectTarjetas.Insert(0, new SelectListItem() { Value = "0", Text = "Tarjetas " });
 
-                                 
+
 
                     //drop presupuesto
                     List<PresupuestoActualModelView> ListaPresupuesto = Mapper.Map<List<PresupuestoActualModel>, List<PresupuestoActualModelView>>(servicioPresupuestoActual.GetPresupuestoCliente());
@@ -128,7 +128,7 @@ namespace SAC.Controllers
                     //para la retencion
                     RetencionModelView retencionModelView = new RetencionModelView();
 
-                  
+
                     List<TipoRetencionModelView> tipoRetencionModelViews = Mapper.Map<List<TipoRetencionModel>, List<TipoRetencionModelView>>(servicioTipoRetencion.GetAllTipoRetencion());
                     retencionModelView.ListaTipoRetencion = (tipoRetencionModelViews.Select(x =>
                                                  new SelectListItem()
@@ -160,9 +160,10 @@ namespace SAC.Controllers
 
                     modelView.Cheque.SelectBancos = SelectListBanco();
                 }
-                else{
-              
-                    modelView.Cotizacion = servicioTipoMoneda.GetCotizacionPorIdMoneda(2);                    
+                else
+                {
+
+                    modelView.Cotizacion = servicioTipoMoneda.GetCotizacionPorIdMoneda(2);
                     modelView.Periodo = Int32.Parse(DateTime.Now.ToString("yyMM"));
                     List<TipoMonedaModelView> tipoMoneda = Mapper.Map<List<TipoMonedaModel>, List<TipoMonedaModelView>>(servicioTipoMoneda.GetAllTipoMonedas());
                     modelView.SelectTipoMoneda = (tipoMoneda.Select(x => new SelectListItem()
@@ -181,7 +182,7 @@ namespace SAC.Controllers
                     })).ToList();
                     modelView.SelectCuentasBancarias.Insert(0, new SelectListItem() { Value = "0", Text = "Cuentas " });
                     ViewBag.listaCuentaBancariaDrop = modelView.SelectCuentasBancarias;
-                    
+
                     modelView.Cheque.SelectBancos = SelectListBanco();
                 }
 
@@ -198,11 +199,11 @@ namespace SAC.Controllers
         {
             List<BancoModel> listaBanco = servicioBancoCuenta.GetAllBanco();
             var lista = (listaBanco.Select(x => new SelectListItem()
-                        {
-                            Value = x.Id.ToString(),
-                            Text = x.Nombre
-                        })).ToList();
-           // lista.Insert(0, new SelectListItem() { Value = "0", Text = "Seleccionar " });
+            {
+                Value = x.Id.ToString(),
+                Text = x.Nombre
+            })).ToList();
+            // lista.Insert(0, new SelectListItem() { Value = "0", Text = "Seleccionar " });
             return lista;
         }
 
@@ -243,10 +244,11 @@ namespace SAC.Controllers
 
         //2  esto es para alimentar la grilla de facturas seleccionadas para pagar
         [HttpPost]
-        public ActionResult AgregarFacturaCobro(int idFacturaSeleccionada, int idModoCobro, string MontoCobro, string CotizacionActual ,int idMoneda)
+        public ActionResult AgregarFacturaCobro(int idFacturaSeleccionada, int idModoCobro, string MontoCobro, string CotizacionActual, int idMoneda)
         {
             CobroFacturaModelView model = Mapper.Map<CobroFacturaModel, CobroFacturaModelView>(servicioFacturaVenta.ObtenerFacturaPorID(idFacturaSeleccionada));
             List<CobroFacturaModelView> listaFacturasSeleccionadas = new List<CobroFacturaModelView>();
+          
             if (idModoCobro == 1)
             {
                 decimal ValorActualizado = 0;
@@ -257,8 +259,8 @@ namespace SAC.Controllers
                         ValorActualizado = model.Saldo / Convert.ToDecimal(CotizacionActual);
                     }
                     // to pesos
-                    if (model.IdMoneda > 1 && idMoneda == 1) 
-                    { 
+                    if (model.IdMoneda > 1 && idMoneda == 1)
+                    {
                         ValorActualizado = model.Saldo * Convert.ToDecimal(CotizacionActual);
                     }
                     model.aplicacion = decimal.Round(ValorActualizado, 2); ;
@@ -266,11 +268,12 @@ namespace SAC.Controllers
                 else
                 {
                     model.aplicacion = model.Saldo;
-                }              
+                }
             }
+           
             if (idModoCobro == 2)
             {
-                //model.aplicacion = ( model.IdMoneda == 2) ? model.aplicacion = Convert.ToDecimal(MontoCobro) * Convert.ToDecimal(CotizacionActual) : model.aplicacion = Convert.ToDecimal(MontoCobro);
+                
                 decimal ValorActualizado = 0;
                 if (idMoneda != model.IdMoneda)
                 {   // pesos to new money
@@ -290,38 +293,108 @@ namespace SAC.Controllers
                     model.aplicacion = Convert.ToDecimal(MontoCobro);
                 }
             }
+          
             if (idModoCobro == 3)
             {
                 decimal ValorActualizado = 0;
-                if (model.IdMoneda == 2)
-                {
-                    ValorActualizado = model.Saldo * Convert.ToDecimal(CotizacionActual);
+                if (idMoneda != model.IdMoneda)
+                {   // pesos to new money
+                    if (model.IdMoneda == 1 && idMoneda != 1)
+                    {
+                        ValorActualizado = model.Saldo / Convert.ToDecimal(CotizacionActual);
+                    }
+                    // to pesos
+                    if (model.IdMoneda > 1 && idMoneda == 1)
+                    {
+                        ValorActualizado = model.Saldo * Convert.ToDecimal(CotizacionActual);
+                    }
+                    model.aplicacion = decimal.Round(ValorActualizado, 2); ;
                 }
                 else
                 {
                     ValorActualizado = model.Saldo;
                 }
-                model.aplicacion = -ValorActualizado;
+                if (model.IdTipoComprobante != 34)
+                {
+                    model.aplicacion = -ValorActualizado;
+                }
+                else
+                {
+                    model.cobro = model.Saldo;
+
+                    model.aplicacion = ValorActualizado;
+                }
+
             }
 
             model.saldoCobro = model.Saldo - model.aplicacion;
-
             if (Session["Facturas_Cobro"] != null)
             {
                 listaFacturasSeleccionadas = Session["Facturas_Cobro"] as List<CobroFacturaModelView>;
-
                 bool existe = false;
                 existe = listaFacturasSeleccionadas.Find(f => f.Id == idFacturaSeleccionada) != null ? true : false;
-
                 if (existe == false)
                 {
                     listaFacturasSeleccionadas.Add(model);
                 }
-
             }
             else
             {
                 listaFacturasSeleccionadas.Add(model);
+            }
+
+            model.Total = (model.Saldo != 0 ? model.Saldo : model.Total);
+            var TotalesAFavor = listaFacturasSeleccionadas.Where(p => p.IdTipoComprobante == 34).GroupBy(c => new { c.IdTipoComprobante })
+                              .Select(c => new
+                              {
+                                  TotalesSaldoCbtCobro = c.Sum(x => x.Saldo),
+                              }).FirstOrDefault();
+
+            var totalCobro = (TotalesAFavor != null) ? TotalesAFavor.TotalesSaldoCbtCobro * -1 : 0;
+
+            if (totalCobro != 0)
+            {
+                foreach (CobroFacturaModelView factura in listaFacturasSeleccionadas.Where(p => p.IdTipoComprobante == 44))
+                {
+                    if (factura.aplicacion <= totalCobro)
+                    {
+                        factura.Saldo = 0;
+                        factura.saldoCobro = 0;
+                        totalCobro = totalCobro - factura.aplicacion;
+                    }
+                    else
+                    {
+                        factura.aplicacion = totalCobro;
+                        factura.saldoCobro = factura.Total - factura.aplicacion;
+                        factura.Saldo = factura.Total - factura.aplicacion;
+                    }
+                }
+                if (totalCobro >= 0)
+                {
+
+                    var totalCobroAfavor =TotalesAFavor.TotalesSaldoCbtCobro + totalCobro;
+                    foreach (CobroFacturaModelView cobroAFavor in listaFacturasSeleccionadas.Where(p => p.IdTipoComprobante == 34))
+                    {
+                        if (totalCobroAfavor < (cobroAFavor.Saldo*-1) )
+                        {
+                            totalCobroAfavor = totalCobroAfavor + cobroAFavor.Saldo;
+                            cobroAFavor.saldoCobro = 0;
+                            cobroAFavor.Saldo = 0;
+                            cobroAFavor.aplicacion = cobroAFavor.Total;
+                            cobroAFavor.cobro = cobroAFavor.Total;
+
+                        }
+                        else
+                        {
+                            cobroAFavor.saldoCobro = cobroAFavor.Saldo - totalCobroAfavor;
+                            cobroAFavor.aplicacion = totalCobroAfavor;
+                            cobroAFavor.Saldo -= totalCobroAfavor;
+                            cobroAFavor.cobro       = totalCobroAfavor;
+                        }
+
+                    }
+                }
+
             }
 
             CobroFacturaModoModelView cobro = new CobroFacturaModoModelView();
@@ -347,7 +420,7 @@ namespace SAC.Controllers
                 bool existe = false;
                 var IdTipoComprobante = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["IdTipoComprobanteVenta"].ToString());
 
- CobroFacturaModelView cobroFactura = new CobroFacturaModelView();
+                CobroFacturaModelView cobroFactura = new CobroFacturaModelView();
 
                 if (listaFacturasSeleccionadas != null)
                 {
@@ -362,43 +435,39 @@ namespace SAC.Controllers
                             existe = true;
                         }
                     }
-
-
                     cobroFactura.Saldo = 0;
-                    cobroFactura.cobro = medioCobro.montoTotal;
+                    cobroFactura.cobro = -medioCobro.montoTotal;
                     cobroFactura.aplicacion = -medioCobro.montoTotal;
                 }
                 else
                 {
                     // adelanto se podria 
                     listaFacturasSeleccionadas = new List<CobroFacturaModelView>();
-                   
                     cobroFactura.Saldo = -medioCobro.montoTotal;
                     cobroFactura.cobro = -medioCobro.montoTotal;
                     cobroFactura.aplicacion = 0;
                 }
 
-               
-                
+
+
                 cobroFactura.IdTipoComprobante = IdTipoComprobante;
-                cobroFactura.NumeroFactura = 0;
-                //cobroFactura.Saldo = 0;
-                //cobroFactura.cobro = medioCobro.montoTotal;
-                //cobroFactura.aplicacion = -medioCobro.montoTotal;
+                cobroFactura.NumeroFactura = 0;                
                 cobroFactura.IdCliente = medioCobro.IdCliente;
                 cobroFactura.IdMoneda = medioCobro.IdMonedaDeOperacion;
                 cobroFactura.Cotiza = medioCobro.Cotizacion.Monto;
                 cobroFactura.Recibo = medioCobro.NumeroRecibo.ToString();
                 cobroFactura.Concepto = medioCobro.ConceptoCobro;
-                cobroFactura.Fecha =Convert.ToDateTime( medioCobro.Fecha);
-                
+                cobroFactura.Fecha = Convert.ToDateTime(medioCobro.Fecha);
+
                 if (totalMontoAplicacionFacturas >= medioCobro.montoTotal)
                 {
                     cobroFactura.saldoCobro = 0;
                 }
                 else
-                { 
-                    cobroFactura.saldoCobro = totalMontoFacturas > 0 ? medioCobro.montoTotal - totalMontoAplicacionFacturas : -medioCobro.montoTotal; 
+                {
+                    cobroFactura.saldoCobro = (totalMontoFacturas > 0 ? medioCobro.montoTotal - totalMontoAplicacionFacturas : medioCobro.montoTotal) * -1;
+                    cobroFactura.aplicacion = medioCobro.montoTotal + cobroFactura.saldoCobro;
+                    cobroFactura.aplicacion = cobroFactura.aplicacion * -1;
                 }
 
                 if (existe == false)
@@ -425,7 +494,7 @@ namespace SAC.Controllers
             RetencionModelView retencion = new RetencionModelView();
             retencion = medioCobro.Retencion;
             retencion.Periodo = int.Parse(DateTime.Now.ToString("yyMM"));
-            retencion.IdCompraFactura = null ;
+            retencion.IdCompraFactura = null;
             retencion.UltimaModificacion = DateTime.Now;
             retencion.Idusuario = usuario.IdUsuario;
             retencion.Fecha = DateTime.Now;
@@ -446,7 +515,7 @@ namespace SAC.Controllers
             {
                 return null;
             }
-         }
+        }
 
         [HttpPost]
         public ActionResult EliminarRetencion(int IdRetencionEliminar, int idFacturaEliminar)
@@ -471,7 +540,7 @@ namespace SAC.Controllers
             }
 
         }
-       
+
         private void ListaCuentaBancaria()
         {
             List<BancoCuentaModelView> ListaCuentaBancaria = Mapper.Map<List<BancoCuentaModel>, List<BancoCuentaModelView>>(servicioBancoCuenta.GetAllCuenta());
@@ -485,13 +554,13 @@ namespace SAC.Controllers
 
         }
 
-        
+
         //-----------------
-         [HttpPost]
+        [HttpPost]
         public ActionResult CancelarPago()
         {
             try
-            {                
+            {
                 Session["Facturas_Cobro"] = null;
                 return Json(new { result = true, data = 1 }, JsonRequestBehavior.AllowGet);
             }
@@ -505,30 +574,28 @@ namespace SAC.Controllers
         public ActionResult Cobrar()
         {
             var datosUsuario = (UsuarioModel)System.Web.HttpContext.Current.Session["currentUser"];
-         
-
-            List<CobroFacturaModelView> cobroFacturaModelViews = Session["Facturas_Cobro"] as List<CobroFacturaModelView>;
-            CobroFacturaModoModelView mediosCobro = Session["mediosCobro"] as CobroFacturaModoModelView;
-            mediosCobro.IdUsuario = datosUsuario.IdUsuario;
-   
             var IdTipoComprobanteVenta = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["IdTipoComprobanteVenta"].ToString());
 
-            servicioFacturaVenta.RegistroDeCobro(Mapper.Map<List<CobroFacturaModelView>, List<CobroFacturaModel>>(cobroFacturaModelViews)
-                                                , Mapper.Map< CobroFacturaModoModelView, CobroFacturaModoModel>(mediosCobro) 
-                                                , IdTipoComprobanteVenta);
 
-            //var f = (from i in cobroFacturaModelViews
-            //         where (i.IdTipoComprobante != 34)
-            //         select new CobroFacturaModelView
-            //         {
-            //             IdMoneda = i.IdMoneda,
-            //             IdCliente = i.IdCliente
-            //         }).FirstOrDefault();
-            
+            List<CobroFacturaModelView> cobroFacturaModelViews = Session["Facturas_Cobro"] as List<CobroFacturaModelView>;
+            if (Session["mediosCobro"] != null)
+            {
+                CobroFacturaModoModelView mediosCobro = Session["mediosCobro"] as CobroFacturaModoModelView;
+                mediosCobro.IdUsuario = datosUsuario.IdUsuario;               
+                servicioFacturaVenta.RegistroDeCobro(Mapper.Map<List<CobroFacturaModelView>, List<CobroFacturaModel>>(cobroFacturaModelViews)
+                                                    , Mapper.Map<CobroFacturaModoModelView, CobroFacturaModoModel>(mediosCobro)
+                                                    , IdTipoComprobanteVenta);
+            }
+            else {
+                /// aplica  cbt cobro a favor a fact
 
-            ViewBag.Factura = Newtonsoft.Json.JsonConvert.SerializeObject("");
-            return View("~/Views/Reporte/Factura.cshtml");
-            //return RedirectToAction("Index");
+                servicioFacturaVenta.RegistroDeCobroCbtAFavor(Mapper.Map<List<CobroFacturaModelView>, List<CobroFacturaModel>>(cobroFacturaModelViews), IdTipoComprobanteVenta);
+
+
+            }
+
+       
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -542,10 +609,10 @@ namespace SAC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult IngresarChequeClienteAjax(ChequeModelView model)
-        {          
+        {
             try
             {
-          
+
                 List<ChequeModelView> listaCheque = new List<ChequeModelView>();
                 ChequeModel chequeModel = Mapper.Map<ChequeModelView, ChequeModel>(model);
                 ChequeModel cheque = servicioCheque.ExisteCheque(chequeModel);
@@ -562,7 +629,7 @@ namespace SAC.Controllers
 
                     cheque = servicioCheque.IngresarChequeCliente(chequeModel);
                     cheque.BancoCheque = servicioBancoCuenta.GetBancoPorIdLazy(cheque.IdBanco);
-                    listaCheque.Add(Mapper.Map<ChequeModel,ChequeModelView>(cheque));
+                    listaCheque.Add(Mapper.Map<ChequeModel, ChequeModelView>(cheque));
                 }
                 //else
                 //{
@@ -572,14 +639,14 @@ namespace SAC.Controllers
                 return PartialView("~/Views/Cobro/_TablaNewCheque.cshtml", listaCheque);
             }
             catch (Exception ex)
-            {             
+            {
                 return JsonView(false, ex.Message.ToString(), "~/Views/Cobro/_TablaChequesCliente.cshtml", model);
             }
 
 
         }
 
-      
+
         private JsonResult JsonView(bool success, string message, string viewName, object model)
         {
             return Json(new { Success = success, Message = message, View = RenderPartialView(viewName, model) });
@@ -609,7 +676,7 @@ namespace SAC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult QuitarCheque(int IdCheque = 0)  
+        public ActionResult QuitarCheque(int IdCheque = 0)
         {
             var usuario = (UsuarioModel)System.Web.HttpContext.Current.Session["currentUser"];
             servicioCheque.DeleteCheque(IdCheque, usuario.IdUsuario);

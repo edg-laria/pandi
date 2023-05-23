@@ -57,6 +57,8 @@ namespace Agenda.Infrastructure
 
             CreateMap<TrackingFacturaPagoCompraModel, TrackingFacturaPagoCompra>();
             CreateMap<TrackingFacturaPagoCompra, TrackingFacturaPagoCompraModel>();
+            CreateMap<TrackingFacturaCobroModel, TrackingFacturaCobroVenta>();
+            CreateMap<TrackingFacturaCobroVenta, TrackingFacturaCobroModel>();
 
             CreateMap<ItemImprModel, ItemImpre>();
             CreateMap<ItemImpre, ItemImprModel>();

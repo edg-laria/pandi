@@ -55,13 +55,7 @@ namespace SAC.Models
         public Nullable<bool> Activo { get; set; }
         public Nullable<int> IdUsuario { get; set; }
         public Nullable<System.DateTime> UltimaModificacion { get; set; }
-        //public BancoCuenta BancoCuenta { get; set; }
-        //public ChequeModelView Cheque { get; set; }
-        //public ChequeraModelView Chequera { get; set; }
-        //public TarjetaModelView Tarjetas { get; set; }
-        //public TipoPagoModelView TipoPago { get; set; }
-        //public FactVenta FactVenta { get; set; }
-
+   
         [Display(Name = "Cliente")]
         public int IdCliente { get; set; }
 

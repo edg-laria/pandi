@@ -57,5 +57,15 @@ namespace Negocio.Modelos
         public List<ItemImpre> ItemImpre { get; set; }
         public List<Retencion> Retencion { get; set; }
         public TipoMoneda TipoMoneda { get; set; }
+
+        //--------------
+        public decimal cobro { get; set; }
+        public decimal aplicacion { get; set; }
+        public decimal saldoCobro { get; set; }
+
+        //--------------
+
+
+
     }
 }

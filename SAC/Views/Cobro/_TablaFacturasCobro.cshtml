@@ -16,18 +16,19 @@
             decimal TotalMontoFactura = 0;
             decimal TotalCobro = 0;
             decimal TotalSaldo = 0;
+            decimal totalAplicacion = 0;
         }
         @if (Model.ResumenPago != null)
         {
             foreach (var item in Model.ResumenPago)
             {
                 <tr>
-                    
+
                     <td class="text-center">@Html.DisplayFor(modelItem => item.NumeroFactura)</td>
                     <td class="text-center">@Html.DisplayFor(modelItem => item.Total)</td>
                     <td class="text-center">@Html.DisplayFor(modelItem => item.cobro)</td>
                     <td class="text-center">@Html.DisplayFor(modelItem => item.aplicacion)</td>
-                    <td class="text-center">@Html.DisplayFor(modelItem => item.saldoCobro )</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.saldoCobro)</td>
                 </tr>
 
                 if (item.IdTipoComprobante != 34)
@@ -36,11 +37,11 @@
                 }
                 else
                 {
-
-                    //TotalCobro += item.aplicacion;
-                    TotalCobro += item.cobro *-1;
+                    TotalCobro += item.cobro;
                 }
                 TotalSaldo = TotalMontoFactura + TotalCobro;
+
+                totalAplicacion += item.aplicacion;
             }
         }
     </tbody>
@@ -71,4 +72,11 @@
             @TotalSaldo
         </label>
     </div>
+
+
 </div>
+<script type="text/javascript">
+
+    confirmarCobro(@totalAplicacion);
+
+</script>

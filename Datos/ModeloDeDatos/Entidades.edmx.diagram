@@ -162,6 +162,8 @@
         <AssociationConnector Association="SAC_Model.FK_ClienteDireccion_Localidad1" />
         <AssociationConnector Association="SAC_Model.FK_Localidad_Pais" />
         <AssociationConnector Association="SAC_Model.FK_Localidad_Provincia" />
+        <EntityTypeShape EntityType="SAC_Model.TrackingFacturaCobroVenta" Width="1.5" PointX="27.375" PointY="13.75" />
+        <AssociationConnector Association="SAC_Model.FK_Cliente_GrupoPresupuesto2" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

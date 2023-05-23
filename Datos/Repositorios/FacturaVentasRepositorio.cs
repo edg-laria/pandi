@@ -75,7 +75,7 @@ namespace Datos.Repositorios
             //             
             return context.FactVenta
                 .Include(c => c.TipoComprobanteVenta)
-                .Where(p => p.IdCliente == idCliente && p.Saldo > 0).OrderByDescending(x => x.NumeroFactura).ToList();
+                .Where(p => p.IdCliente == idCliente && p.Saldo != 0).OrderByDescending(x => x.NumeroFactura).ToList();
 
         }
         public List<FactVenta> GetClienteCtaCteCbte(int idCliente, int? idTipoMoneda)

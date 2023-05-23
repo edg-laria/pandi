@@ -813,7 +813,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CodigoPostal" Type="nvarchar" MaxLength="20" />
-          <Property Name="Nombre" Type="nvarchar" MaxLength="100" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Altini" Type="nvarchar" MaxLength="50" />
           <Property Name="AltFin" Type="nvarchar" MaxLength="50" />
           <Property Name="CodigoProvincia" Type="nvarchar" MaxLength="50" />
@@ -1023,7 +1023,7 @@
           <Property Name="UltimaModificacion" Type="datetime" />
         </EntityType>
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'sac.dbo.REGISTRO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'SAC2022.dbo.REGISTRO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="REGISTRO">
           <Key>
             <PropertyRef Name="identificador" />
@@ -1237,6 +1237,17 @@ advertencia 6002: La tabla o vista 'sac.dbo.REGISTRO' no tiene definida ninguna 
           <Property Name="Idusuario" Type="int" />
           <Property Name="UltimaModificacion" Type="datetime" />
         </EntityType>
+        <EntityType Name="TrackingFacturaCobroVenta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdFactura" Type="int" Nullable="false" />
+          <Property Name="IdPago" Type="int" Nullable="false" />
+          <Property Name="Activo" Type="bit" />
+          <Property Name="IdUsuario" Type="int" />
+          <Property Name="UltimaModificacion" Type="datetime" />
+        </EntityType>
         <EntityType Name="TrackingFacturaPagoCompra">
           <Key>
             <PropertyRef Name="Id" />
@@ -1274,7 +1285,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.REGISTRO' no tiene definida ninguna 
           <Property Name="UltimaModificacion" Type="datetime" />
         </EntityType>
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'sac.dbo.CompraIvaVista' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'SAC2022.dbo.CompraIvaVista' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="CompraIvaVista">
           <Key>
             <PropertyRef Name="Expr4" />
@@ -1358,7 +1369,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.CompraIvaVista' no tiene definida ni
           <Property Name="Expr3" Type="int" />
         </EntityType>
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'SAC2022.dbo.CuentaCorriente' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="CuentaCorriente">
           <Key>
             <PropertyRef Name="ProveedorCodigo" />
@@ -1366,7 +1377,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
           <Property Name="ProveedorCodigo" Type="int" Nullable="false" />
           <Property Name="ProveedorNombre" Type="varchar" MaxLength="50" />
           <Property Name="MontoPesos" Type="decimal" Precision="38" Scale="2" />
-          <Property Name="MontoDolares" Type="decimal" Precision="38" Scale="5" />
+          <Property Name="MontoDolares" Type="decimal" Precision="38" Scale="2" />
           <Property Name="TotalDeuda" Type="decimal" Precision="38" Scale="2" />
           <Property Name="UltimoMovimiento" Type="datetime" />
         </EntityType>
@@ -1575,22 +1586,10 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Cliente_GrupoPresupuesto">
-          <End Role="GrupoPresupuesto" Type="Self.GrupoPresupuesto" Multiplicity="0..1" />
+          <End Role="PrespuestoActual" Type="Self.PrespuestoActual" Multiplicity="0..1" />
           <End Role="Cliente" Type="Self.Cliente" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="GrupoPresupuesto">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cliente">
-              <PropertyRef Name="IdGrupoPresupuesto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Cliente_GrupoPresupuesto1">
-          <End Role="GrupoPresupuesto" Type="Self.GrupoPresupuesto" Multiplicity="0..1" />
-          <End Role="Cliente" Type="Self.Cliente" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GrupoPresupuesto">
+            <Principal Role="PrespuestoActual">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Cliente">
@@ -2446,6 +2445,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
           <EntitySet Name="TipoPago" EntityType="Self.TipoPago" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoProveedor" EntityType="Self.TipoProveedor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoRetencion" EntityType="Self.TipoRetencion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrackingFacturaCobroVenta" EntityType="Self.TrackingFacturaCobroVenta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrackingFacturaPagoCompra" EntityType="Self.TrackingFacturaPagoCompra" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ValorCotizacion" EntityType="Self.ValorCotizacion" Schema="dbo" store:Type="Tables" />
@@ -2596,11 +2596,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
             <End Role="Chequera" EntitySet="Chequera" />
           </AssociationSet>
           <AssociationSet Name="FK_Cliente_GrupoPresupuesto" Association="Self.FK_Cliente_GrupoPresupuesto">
-            <End Role="GrupoPresupuesto" EntitySet="GrupoPresupuesto" />
-            <End Role="Cliente" EntitySet="Cliente" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Cliente_GrupoPresupuesto1" Association="Self.FK_Cliente_GrupoPresupuesto1">
-            <End Role="GrupoPresupuesto" EntitySet="GrupoPresupuesto" />
+            <End Role="PrespuestoActual" EntitySet="PrespuestoActual" />
             <End Role="Cliente" EntitySet="Cliente" />
           </AssociationSet>
           <AssociationSet Name="FK_Cliente_PieNota" Association="Self.FK_Cliente_PieNota">
@@ -3278,6 +3274,11 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
             <End Role="Provincia" EntitySet="Provincia" />
             <End Role="Localidad" EntitySet="Localidad" />
           </AssociationSet>
+          <EntitySet Name="TrackingFacturaCobroVenta" EntityType="SAC_Model.TrackingFacturaCobroVenta" />
+          <AssociationSet Name="FK_Cliente_GrupoPresupuesto2" Association="SAC_Model.FK_Cliente_GrupoPresupuesto2">
+            <End Role="PrespuestoActual" EntitySet="PrespuestoActual" />
+            <End Role="Cliente" EntitySet="Cliente" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Accion">
           <Key>
@@ -3863,6 +3864,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
           <Property Name="IdUsuario" Type="Int32" />
           <Property Name="UltimaModificacion" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Proveedor" Relationship="SAC_Model.FK_Proveedor_Presupuesto1" FromRole="PrespuestoActual" ToRole="Proveedor" />
+          <NavigationProperty Name="Cliente" Relationship="SAC_Model.FK_Cliente_GrupoPresupuesto2" FromRole="PrespuestoActual" ToRole="Cliente" />
         </EntityType>
         <EntityType Name="PresupuestoCosto">
           <Key>
@@ -4784,7 +4786,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
           <Property Name="ProveedorCodigo" Type="Int32" Nullable="false" />
           <Property Name="ProveedorNombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="MontoPesos" Type="Decimal" Precision="38" Scale="2" />
-          <Property Name="MontoDolares" Type="Decimal" Precision="38" Scale="5" />
+          <Property Name="MontoDolares" Type="Decimal" Precision="38" Scale="2" />
           <Property Name="TotalDeuda" Type="Decimal" Precision="38" Scale="2" />
           <Property Name="UltimoMovimiento" Type="DateTime" Precision="3" />
         </EntityType>
@@ -5351,6 +5353,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
           <NavigationProperty Name="TipoMoneda" Relationship="SAC_Model.FK_Cliente_TipoMoneda" FromRole="Cliente" ToRole="TipoMoneda" />
           <NavigationProperty Name="FactVenta" Relationship="SAC_Model.FK_FactVenta_Cliente" FromRole="Cliente" ToRole="FactVenta" />
           <NavigationProperty Name="ClienteDireccion" Relationship="SAC_Model.FK_ClienteDireccion_Cliente" FromRole="Cliente" ToRole="ClienteDireccion" />
+          <NavigationProperty Name="PrespuestoActual" Relationship="SAC_Model.FK_Cliente_GrupoPresupuesto2" FromRole="Cliente" ToRole="PrespuestoActual" />
         </EntityType>
         <Association Name="FK_Cliente_GrupoPresupuesto">
           <End Type="SAC_Model.GrupoPresupuesto" Role="GrupoPresupuesto" Multiplicity="0..1" />
@@ -5748,7 +5751,7 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CodigoPostal" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Altini" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AltFin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CodigoProvincia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -5811,6 +5814,29 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
             </Principal>
             <Dependent Role="Localidad">
               <PropertyRef Name="IdProvincia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TrackingFacturaCobroVenta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdFactura" Type="Int32" Nullable="false" />
+          <Property Name="IdPago" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" />
+          <Property Name="IdUsuario" Type="Int32" />
+          <Property Name="UltimaModificacion" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_Cliente_GrupoPresupuesto2">
+          <End Type="SAC_Model.PrespuestoActual" Role="PrespuestoActual" Multiplicity="0..1" />
+          <End Type="SAC_Model.Cliente" Role="Cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrespuestoActual">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cliente">
+              <PropertyRef Name="IdGrupoPresupuesto" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7225,6 +7251,18 @@ advertencia 6002: La tabla o vista 'sac.dbo.CuentaCorriente' no tiene definida n
                 <ScalarProperty Name="Altini" ColumnName="Altini" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="CodigoPostal" ColumnName="CodigoPostal" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrackingFacturaCobroVenta">
+            <EntityTypeMapping TypeName="SAC_Model.TrackingFacturaCobroVenta">
+              <MappingFragment StoreEntitySet="TrackingFacturaCobroVenta">
+                <ScalarProperty Name="UltimaModificacion" ColumnName="UltimaModificacion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="IdPago" ColumnName="IdPago" />
+                <ScalarProperty Name="IdFactura" ColumnName="IdFactura" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

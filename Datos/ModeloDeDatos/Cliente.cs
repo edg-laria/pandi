@@ -53,5 +53,6 @@ namespace Datos.ModeloDeDatos
         public virtual ICollection<FactVenta> FactVenta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClienteDireccion> ClienteDireccion { get; set; }
+        public virtual PrespuestoActual PrespuestoActual { get; set; }
     }
 }

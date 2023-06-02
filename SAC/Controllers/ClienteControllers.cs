@@ -196,9 +196,11 @@ namespace SAC.Controllers
                 {
                     fechaHasta = DateTime.ParseExact(searchFecha, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                    model = Mapper.Map<List<CteCteClienteResumenModel>, List<CteCteClienteResumenModelView>>(oServicioCliente.GetCtaCteResumen(fechaHasta));
-
                 }
+                model = Mapper.Map<List<CteCteClienteResumenModel>, List<CteCteClienteResumenModelView>>(oServicioCliente.GetCtaCteResumen(fechaHasta));
+
+
+
             }
             catch (Exception ex)
             {
@@ -223,7 +225,8 @@ namespace SAC.Controllers
             {
                 Periodo = DateTime.Now.ToString("yyMM");
                 }  
-            model.Anio = Anio;
+                
+                model.Anio = Anio;
                 model.MesNro = Mes;
                 model.Periodo = Periodo;
                 model.ListaConsultaIva = Mapper.Map<List<ConsultaIvaVentaModel>, List<ConsultaIvaVentaModelView>>(oServicioCliente.GetIvaVentas(Periodo));
@@ -354,13 +357,11 @@ namespace SAC.Controllers
 
             DataTable dt = new DataTable("Grid");
 
-            dt.Columns.AddRange(new DataColumn[16]
+            dt.Columns.AddRange(new DataColumn[14]
                                              {
                                              new DataColumn("Clase"),
-                                             new DataColumn("Tipo"),
                                              new DataColumn("Punto"),
                                              new DataColumn("NumeroFactura"),
-                                             new DataColumn("Codigo"),
                                              new DataColumn("Empresa"),
                                              new DataColumn("Neto"),
                                              new DataColumn("TotalIva"),
@@ -384,7 +385,7 @@ namespace SAC.Controllers
             foreach (FacturaVentaIvaModelView i in listResultado)
             {
 
-                dt.Rows.Add(i.Clase, i.Tipo, i.Punto, i.NumeroFactura, i.Codigo, i.Codigo, i.Neto, i.TotalIva, i.Gasto, i.Isib, i.Total, i.Cuit, i.Dolar, i.Moneda, i.Periodo, i.Asiento);
+                dt.Rows.Add(i.Clase, i.Punto, i.NumeroFactura,  i.Empresa, i.Neto, i.TotalIva, i.Gasto, i.Isib, i.Total, i.Cuit, i.Dolar, i.Moneda, i.Periodo, i.Asiento);
 
 
             }

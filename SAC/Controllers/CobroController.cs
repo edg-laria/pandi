@@ -271,6 +271,7 @@ namespace SAC.Controllers
                 }
             }
            
+        
             if (idModoCobro == 2)
             {
                 
@@ -294,6 +295,7 @@ namespace SAC.Controllers
                 }
             }
           
+         
             if (idModoCobro == 3)
             {
                 decimal ValorActualizado = 0;
@@ -327,7 +329,14 @@ namespace SAC.Controllers
 
             }
 
+
+
+
+
+
             model.saldoCobro = model.Saldo - model.aplicacion;
+
+            //add cbt
             if (Session["Facturas_Cobro"] != null)
             {
                 listaFacturasSeleccionadas = Session["Facturas_Cobro"] as List<CobroFacturaModelView>;
@@ -343,18 +352,22 @@ namespace SAC.Controllers
                 listaFacturasSeleccionadas.Add(model);
             }
 
+
+
+
             model.Total = (model.Saldo != 0 ? model.Saldo : model.Total);
-            var TotalesAFavor = listaFacturasSeleccionadas.Where(p => p.IdTipoComprobante == 34).GroupBy(c => new { c.IdTipoComprobante })
-                              .Select(c => new
-                              {
-                                  TotalesSaldoCbtCobro = c.Sum(x => x.Saldo),
-                              }).FirstOrDefault();
+            var TotalesAFavor = listaFacturasSeleccionadas.Where(p => p.IdTipoComprobante == 34) 
+                                                          .GroupBy(c => new { c.IdTipoComprobante })
+                                                          .Select(c => new
+                                                          {
+                                                              TotalesSaldoCbtCobro = c.Sum(x => x.Total ) ,
+                                                          }).FirstOrDefault();
 
             var totalCobro = (TotalesAFavor != null) ? TotalesAFavor.TotalesSaldoCbtCobro * -1 : 0;
 
             if (totalCobro != 0)
             {
-                foreach (CobroFacturaModelView factura in listaFacturasSeleccionadas.Where(p => p.IdTipoComprobante == 44))
+               foreach (CobroFacturaModelView factura in listaFacturasSeleccionadas.Where(p => p.IdTipoComprobante == 44))
                 {
                     if (factura.aplicacion <= totalCobro)
                     {
@@ -372,12 +385,14 @@ namespace SAC.Controllers
                 if (totalCobro >= 0)
                 {
 
-                    var totalCobroAfavor =TotalesAFavor.TotalesSaldoCbtCobro + totalCobro;
+                    var totalfactura= TotalesAFavor.TotalesSaldoCbtCobro  + totalCobro;
+
                     foreach (CobroFacturaModelView cobroAFavor in listaFacturasSeleccionadas.Where(p => p.IdTipoComprobante == 34))
                     {
-                        if (totalCobroAfavor < (cobroAFavor.Saldo*-1) )
+                        if (totalCobro >= (cobroAFavor.Total*-1) )
                         {
-                            totalCobroAfavor = totalCobroAfavor + cobroAFavor.Saldo;
+                            totalCobro = totalCobro + cobroAFavor.Total;
+                            totalfactura = totalfactura - cobroAFavor.Total;
                             cobroAFavor.saldoCobro = 0;
                             cobroAFavor.Saldo = 0;
                             cobroAFavor.aplicacion = cobroAFavor.Total;
@@ -386,20 +401,31 @@ namespace SAC.Controllers
                         }
                         else
                         {
-                            cobroAFavor.saldoCobro = cobroAFavor.Saldo - totalCobroAfavor;
-                            cobroAFavor.aplicacion = totalCobroAfavor;
-                            cobroAFavor.Saldo -= totalCobroAfavor;
-                            cobroAFavor.cobro       = totalCobroAfavor;
-                        }
 
+                            cobroAFavor.saldoCobro = cobroAFavor.Total - totalfactura;
+                            cobroAFavor.aplicacion = totalfactura;
+                            cobroAFavor.Saldo = cobroAFavor.Total - totalfactura;
+                            cobroAFavor.cobro = totalfactura;
+
+                        }
                     }
                 }
 
             }
 
+
+
+
+
+
+
+
+
+
+
             CobroFacturaModoModelView cobro = new CobroFacturaModoModelView();
             Session["Facturas_Cobro"] = listaFacturasSeleccionadas;
-            cobro.ResumenPago = listaFacturasSeleccionadas;
+            cobro.ResumenPago = listaFacturasSeleccionadas.OrderBy(c => c.NumeroFactura).ToList();
             return PartialView("_TablaFacturasCobro", cobro);
 
         }

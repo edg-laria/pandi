@@ -322,14 +322,16 @@ namespace Datos.Repositorios
             var r=  context.FactVenta
                          .Include("Cliente")
                          .Where(p => p.Activo == true &&
-                         p.Fecha.Month < fechaHasta.Month && p.Fecha.Year < fechaHasta.Year)
+                         p.Fecha.Month <= fechaHasta.Month &&
+                         p.Fecha.Year <= fechaHasta.Year &&
+                         p.Saldo != 0)
                          .GroupBy(c => new { c.Cliente.Codigo, c.Cliente.Nombre })
                          .Select(c => new CteCteClienteResumen ()
                          {
                              Codigo = c.Key.Codigo,
                              Nombre = c.Key.Nombre,
-                             TotalPesos = c.Sum(x => x.Total),
-                             TotalDolares = c.Sum(x => x.TotalDolares),
+                             TotalPesos = c.Sum(x => x.IdMoneda == 1 ? x.Saldo : 0),
+                             TotalDolares = c.Sum(x => x.IdMoneda == 2 ? x.Saldo : 0),
                              FechaUltimoMov = c.Max(x => x.Fecha),
                          }).ToList();
 
@@ -354,7 +356,7 @@ namespace Datos.Repositorios
 
             var query = from a in context.FactVenta
                         join s in context.IvaVenta on a.NumeroFactura equals s.NumeroFactura
-                        where a.Activo == true // && a.Periodo == periodo
+                        where a.Activo == true && a.Periodo == periodo
 
                         select new ConsultaIvaVenta
                         {

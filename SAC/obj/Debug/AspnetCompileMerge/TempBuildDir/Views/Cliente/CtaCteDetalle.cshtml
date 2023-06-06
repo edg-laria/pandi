@@ -122,74 +122,74 @@
                                             {
                                                 claseSele = "table-default";
                                             }
-                                        
-                                                <tr ondblclick="ImprimirFactura(@item.IdCliente, @item.Id ,@item.TipoComprobanteVenta.CodigoAfip)" class="Seleccionable @claseSele">
-                                                    <td style="max-width: 33%;">
-                                                        @Html.DisplayFor(modelItem => item.TipoComprobanteVenta.Abreviatura)
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.TipoComprobanteVenta.CodigoAfip)
-                                                    </td>
 
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.TipoComprobanteVenta.PuntoVenta)
-                                                    </td>
+                                            <tr ondblclick="ImprimirFactura(@item.IdCliente, @item.Id ,@item.TipoComprobanteVenta.CodigoAfip)" class="Seleccionable @claseSele">
+                                                <td style="max-width: 33%;">
+                                                    @Html.DisplayFor(modelItem => item.TipoComprobanteVenta.Abreviatura)
+                                                </td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.TipoComprobanteVenta.CodigoAfip)
+                                                </td>
 
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.NumeroFactura)
-                                                    </td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.TipoComprobanteVenta.PuntoVenta)
+                                                </td>
 
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.Fecha)
-                                                    </td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.NumeroFactura)
+                                                </td>
 
-                                                    <td class="text-right">
-                                                        @if (item.IdMoneda == 1 && item.TipoComprobanteVenta.CodigoAfip != 99)
-                                                        {
-                                                            @Html.DisplayFor(modelItem => item.Total)
-                                                        }
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @if (item.IdMoneda == 1 && item.TipoComprobanteVenta.CodigoAfip == 99)
-                                                        {
-                                                            @Html.DisplayFor(modelItem => item.Total)
-                                                        }
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.Fecha)
+                                                </td>
 
-                                                    </td>
+                                                <td class="text-right">
+                                                    @if (item.IdMoneda == 1 && item.TipoComprobanteVenta.CodigoAfip != 99)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Total)
+                                                    }
+                                                </td>
+                                                <td class="text-right">
+                                                    @if (item.IdMoneda == 1 && item.TipoComprobanteVenta.CodigoAfip == 99)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Total)
+                                                    }
 
-                                                    <td class="text-right">
-                                                        @if (item.IdMoneda == 2 && item.TipoComprobanteVenta.CodigoAfip != 99)
-                                                        {
-                                                            @Html.DisplayFor(modelItem => item.Total)
-                                                        }
-                                                    </td>
+                                                </td>
 
-                                                    <td class="text-right">
-                                                        @if (item.IdMoneda == 2 && item.TipoComprobanteVenta.CodigoAfip == 99)
-                                                        {
-                                                            @Html.DisplayFor(modelItem => item.Total)
-                                                        }
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.Parcial)
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.Saldo)
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.Cotiza)
-                                                    </td>
+                                                <td class="text-right">
+                                                    @if (item.IdMoneda == 2 && item.TipoComprobanteVenta.CodigoAfip != 99)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Total)
+                                                    }
+                                                </td>
 
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.NumeroCobro)
-                                                    </td>
+                                                <td class="text-right">
+                                                    @if (item.IdMoneda == 2 && item.TipoComprobanteVenta.CodigoAfip == 99)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Total)
+                                                    }
+                                                </td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.Parcial)
+                                                </td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.Saldo)
+                                                </td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.Cotiza)
+                                                </td>
 
-                                                    <td class="text-right">
-                                                        @Html.DisplayFor(modelItem => item.Concepto)
-                                                    </td>
-                                                </tr>
-                                                }
-                                            </tbody>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.NumeroCobro)
+                                                </td>
+
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(modelItem => item.Concepto)
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -197,25 +197,26 @@
                     <div class="row m-b-10">
 
                         <div class="col-md-2"> </div>
-                        <small class=" col-md-2">Facturas Impagas</small>
-                        <small class=" col-md-2">Cobro Parciales</small>
-                        <small class=" col-md-2">Saldo Factura</small>
+                        <small class=" col-md-2">Total Fact. Impagas</small>
+                        <small class=" col-md-2">Parciales</small>
+                        <small class=" col-md-2">Cobros</small>
+                        <small class=" col-md-2">Saldo Cta. Cte.</small>
                     </div>
 
                     <div class="row m-b-10">
                         <div class="col-md-2 text-right"> Pesos </div>
-                        <small class=" col-md-2 font-weight-bold">$ @Model.facImpPesos</small>
-                        <small class=" col-md-2 font-weight-bold">$ @Model.facParcialPesos</small>
-                        @{ var SaldoPesos = Model.facImpPesos - Model.facParcialPesos;}
-                        <small class=" col-md-2 font-weight-bold">$ @SaldoPesos</small>
+                        <small class=" col-md-2 font-weight-bold">$ @Model.TotalPesos</small>
+                        <small class=" col-md-2 font-weight-bold">$ @Model.TotalParcialPesos</small>
+                        <small class=" col-md-2 font-weight-bold">$ @Model.TotalPesosCobros</small>
+                        <small class=" col-md-2 font-weight-bold">$ @Model.TotalSaldoPesos</small>
                     </div>
 
                     <div class="row m-b-10">
                         <div class="col-md-2 text-right"> Dolares </div>
-                        <small class=" col-md-2 font-weight-bold">$ @Model.facImpDolares</small>
-                        <small class=" col-md-2 font-weight-bold">$ @Model.facParcialDolares</small>
-                        @{ var SaldoDolares = Model.facImpDolares + Model.facParcialDolares;}
-                        <small class=" col-md-2 font-weight-bold">$ @SaldoDolares</small>
+                        <small class=" col-md-2 font-weight-bold">$ @Model.TotalDolares</small>
+                        <small class=" col-md-2 font-weight-bold">$ @Model.TotalParcialDolares</small>
+                        <small class=" col-md-2 font-weight-bold">$ @Model.TotalDolaresCobros</small>
+                        <small class=" col-md-2 font-weight-bold">$ @Model.TotalSaldoDolares</small>
                     </div>
 
                 }
@@ -334,7 +335,7 @@
 
 
 
-    
+
     </script>
 }
 

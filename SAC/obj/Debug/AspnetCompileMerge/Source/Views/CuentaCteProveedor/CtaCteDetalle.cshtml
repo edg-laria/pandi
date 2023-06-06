@@ -6,10 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     decimal SaldoTotal = 0;
-    //decimal TotalDolares = 0;
-    //decimal TotalCheque = 0;
-    //decimal TotalTarjeta = 0;
-    //decimal TotalDeposito = 0;
+   
 }
 <!-- Date picker plugins css -->
 <link href="/Content/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
@@ -37,9 +34,9 @@
                                 <div class="form-group row">
                                     <small class="text-right col-md-3">Proveedor</small>
                                     <div class="col-md-9">
-                                        <input type="hidden" id="searchIdProveedor" name="searchIdProveedor" />
+                                        <input type="hidden" id="searchIdProveedor" name="searchIdProveedor" value="@ViewBag.idProveedor"/>
                                         <input class="form-control form-control-sm" id="NombreProveedor" name="ProveedorNombre" type="text" placeholder="Nombre del proveedor">
-                                        @*<small class="form-control-feedback"> [Autocompletable]</small>*@
+
                                     </div>
                                 </div>
                             </div>

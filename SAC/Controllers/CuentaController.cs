@@ -194,32 +194,7 @@ namespace SAC.Controllers
             }
         }
 
-        //private LoginViewModel checkCookie()
-        //{
-        //    LoginViewModel cuenta = null;
-        //    string username = string.Empty;
-        //    if(Request.Cookies["ckUsuario"] != null)
-        //    {
-        //        username = Request.Cookies["ckUsuario"].Value;
-        //    }
-        //    if (!String.IsNullOrEmpty(username))
-        //    {
-        //        cuenta = new LoginViewModel { Usuario = username };
-        //    }
-        //    return cuenta;
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
+       
 
 
 

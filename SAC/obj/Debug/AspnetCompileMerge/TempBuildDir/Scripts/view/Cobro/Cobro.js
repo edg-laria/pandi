@@ -1,9 +1,25 @@
 ﻿$(function () {
 
-
-
-
+ 
 });
+
+
+//$(".ShowBtnConfirmarCobro").click(function () {
+//    confirmarCobro();
+//});
+
+function confirmarCobro(totalAplicacion) {
+    //var totalFact = parseFloat($("#LblImporteAPagarCheque").html().trim());//total de factura
+    //var totalCobro = parseFloat($("#LblTotalPago").html().trim());
+    //var diferencia = parseFloat($("#LblTotalSaldo").html().trim());
+   // if ((totalFact > 0 || totalCobro != 0) && diferencia == 0) {       
+    if (totalAplicacion == 0) {
+        $("#btnGenerarPago").css("display", "block");
+    } else {
+        $("#btnGenerarPago").css("display", "none");
+    }
+}
+
 
 //-------new cheque cliente
 function fnNewModalCheques() {
@@ -205,8 +221,8 @@ function EjecutarPago() {
     $("#montoRetencion").val('');
     $("#montoTotal").val('');
     $("#idPresupuesto").val(0);
-    $("#btnGenerarPago").css("display", "block");
-
+    //$("#btnGenerarPago").css("display", "block");
+    confirmarCobro();
 }
 
 
@@ -328,6 +344,7 @@ function Cobrar(valor, valor1, valor2, tipoComprobante, IdMoneda) {
     }
 
     $("#ModalModoPago").modal('show');
+    
 }
 
 

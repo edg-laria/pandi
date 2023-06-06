@@ -64,7 +64,8 @@
 
                                 <div class="col-md-2">
                                     <small>Pto Venta</small>
-                                    @Html.DropDownListFor(model => model.IdPuntoVenta, Model.SelectPuntoVenta, null, new { @class = "form-control form-control-sm" })
+                                    @*@Html.DropDownListFor(model => model.IdPuntoVenta, Model.SelectPuntoVenta, null, new { @class = "form-control form-control-sm" })*@
+                                    @Html.DropDownList("IdPuntoVenta", Model.SelectPuntoVenta, "Seleccione opcion", new { @class = "form-control form-control-sm" })
                                 </div>
 
                                 <div class="col-md-1">
@@ -240,10 +241,7 @@
                                 <div class="col-sm-1"></div>
                             </div>
 
-                            @*<div class="row">
-                                    <div class="col-md-8"></div>
-                                    <div class="col-md-4"></div>
-                                </div>*@
+                         
                             <div class="row">
                                 <div class="col-md-8">
                                     <fieldset>
@@ -430,10 +428,6 @@
             select: function (event, ui) {
                 getCliente(ui.item.id)
                 $("#IdCliente").val(ui.item.id);
-                //  $("#Proveedor_Id").val(ui.item.id);
-
-                // this.value = ui.item.value;
-
                 return false;
             }
 
@@ -447,10 +441,10 @@
                   
                     var puntoVenta;
                     if (cliente.IdTipoCliente == 2) {
-                        puntoVenta = 2;
+                        puntoVenta = 9;//local
                     }
                     else {
-                        puntoVenta = 3;
+                        puntoVenta = 9;//exterior
                     }
 
                     $("#IdPuntoVenta option[value=" + puntoVenta + "]").attr('selected', 'true');
@@ -469,12 +463,10 @@
 
 
                     $("#IdTipoIdioma").val(cliente.IdIdioma);
-                    //$("#Cuit").val(cliente.Cuit);
 
                     $("#idTipoComprobanteSeleccionado").empty();
                     $("#idTipoComprobanteSeleccionado").append("<option value> Seleccionar ...</option>")
-                    $.each(cliente.ListaComprobantesDrop, function (index, row) {
-                        // console.log(row);
+                    $.each(cliente.ListaComprobantesDrop, function (index, row) {                   
                         $("#idTipoComprobanteSeleccionado").append("<option value='" + row.Value + "'>" + row.Text + "</option>")
                     });
 
@@ -483,8 +475,6 @@
                     $.each(cliente.ClienteDireccion, function (index, row) {
                         $("#IdDireccionCliente").append("<option value='" + row.Id + "'>" + row.Direccion + "</option>")
                     });
-
-
                 });
 
         }
@@ -509,9 +499,6 @@
             select: function (event, ui) {
                 getArticulo(ui.item.id)
                 $("#IdArticulo").val(ui.item.id);
-                //  $("#Proveedor_Id").val(ui.item.id);
-
-                //this.value = ui.item.value;
                 return false;
             }
 
@@ -521,9 +508,7 @@
             $.getJSON("/Factura/GetCodigoJson",
                 { IdArticulo: cod },
                 function (data) {
-                    var articulo = JSON.parse(data);
-                    //console.log(articulo);
-
+                    var articulo = JSON.parse(data);              
                     $("#txtCodigo").val(articulo.Codigo);
                     if ($("#IdTipoIdioma").val() == 1) {
                         $("#txtCodigoDescripcion").val(articulo.DescripcionCastellano);
@@ -569,10 +554,7 @@
             else {
                 $("#MostrarItems").css("display", "none");
             }
-
-
-            CargarItems();
-            // $('#TblItemsFact > tfoot:last-child').append("<tr><td>Total:</td><td>" + 111 + "</td></tr>");
+            CargarItems();           
         }
 
         function CargarItems() {
@@ -650,46 +632,54 @@
                     {
                         idCliente: idCliente,
                         nroFactura: nroFactura,
-                        idComprobante: 1
+                        idPuntoVenta:$("#IdPuntoVenta").val(),
                     },
                     function (data) {
                         var resultado = JSON.parse(data);
-                        console.log(resultado);
-                        $("#idTipoMoneda").val(resultado.factura.IdMoneda);
-                        $("#EncabezadoFact").val(resultado.factura.Concepto);
-                        if (resultado.factura.IdMoneda != 1) {
-                            $("#Cotizacion").val(resultado.factura.CotizaP);
-                        }
-
-                        $("#ORef").val(resultado.factura.ORef);
-                        $("#YREf").val(resultado.factura.YRef);
-
-
-
-
-                        var item = 0;
-
-                        var item = $('#TblItemsFact >tbody >tr').length;
-                        if (item == 0) {
-                            for (var clave in resultado.items) {
-                                //console.log(resultado.items[clave].Codigo);
-                                //console.log("La clave es " + clave + " y el valor es " + rates[clave]);
-
-                                item += 1;
-
-                                $('#TblItemsFact > tbody:last-child').append("<tr><td>" + item + "</td><td>" + resultado.items[clave].Codigo + "</td><td>" + resultado.items[clave].Descripcion + "</td><td>" + resultado.items[clave].Precio + "</td></tr>");
-
-                                SumarMontoTotal();
+                        if (resultado) {
+                            $("#idTipoMoneda").val(resultado.factura.IdMoneda);
+                            $("#EncabezadoFact").val(resultado.factura.Concepto);
+                            if (resultado.factura.IdMoneda != 1) {
+                                $("#Cotizacion").val(resultado.factura.CotizaP);
                             }
-                            $("#MostrarItems").css("display", "block");
-                            $("#ColumnaEliminar").css("display", "none");
-                            $("#TotalAjuste").css("display", "block");
 
+                            $("#ORef").val(resultado.factura.ORef);
+                            $("#YREf").val(resultado.factura.YRef);
+
+
+
+
+                            var item = 0;
+
+                            var item = $('#TblItemsFact >tbody >tr').length;
+                            if (item == 0) {
+                                for (var clave in resultado.items) {
+                                   
+                                    item += 1;
+
+                                    $('#TblItemsFact > tbody:last-child').append("<tr><td>" + item + "</td><td>" + resultado.items[clave].Codigo + "</td><td>" + resultado.items[clave].Descripcion + "</td><td>" + resultado.items[clave].Precio + "</td></tr>");
+
+                                    SumarMontoTotal();
+                                }
+                                $("#MostrarItems").css("display", "block");
+                                $("#ColumnaEliminar").css("display", "none");
+                                $("#TotalAjuste").css("display", "block");
+
+                            }
+                        } else {
+                            //limpiar tabla item
+                            var item = $('#TblItemsFact >tbody >tr').length;
+                            $('#TblItemsFact > tbody:last-child').replaceAll();
+   
+                        
+                            alert("Ingrese el cliente y el nro factura para buscar o verifique el tipo de comprobante");
                         }
+                      
 
                     });
             }
             else {
+
                 alert("Ingrese el cliente y el nro factura para buscar o verifique el tipo de comprobante");
             }
         });
@@ -761,8 +751,7 @@
             }
             else {
                 $("#ItemsCargaDatos").css("display", "inline-flex");
-                $("#ItemsCargaDatosBtn").css("display", "block");
-                //borro las filas de la tabla
+                $("#ItemsCargaDatosBtn").css("display", "block");                
                 $('table tbody tr').remove();
                 $("#MostrarItems").css("display", "none");
                 $("#Total").css("display", "none");
@@ -870,14 +859,7 @@
             location.href = "/Factura/index";
         })
 
-                        //en teoria valida y si esta ok hace el submit
-                        //$(function () {
-                        //    $('#FrmGrabar').on('submit', function (event) {
-                        //        event.preventDefault();
-                        //        return Validacion();
-                        //    });
-                        //});
-
+                      
     </script>
 
 

@@ -75,16 +75,12 @@
                                         <tbody>
                                             @foreach (var item in Model)
                                             {
-
                                                 <tr>
                                                     <td>@Html.DisplayFor(modelItem => item.Codigo)</td>
                                                     <td class="text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
                                                     <td class="text-right">@Html.DisplayFor(modelItem => item.TotalPesos)</td>
                                                     <td class="text-center">@Html.DisplayFor(modelItem => item.TotalDolares)</td>
                                                     <td class="text-center">@Html.DisplayFor(modelItem => item.FechaUltimoMov)</td>
-
-
-
                                                 </tr>
                                             }
                                         </tbody>
